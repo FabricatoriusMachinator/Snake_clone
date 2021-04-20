@@ -1,5 +1,4 @@
-#ifndef GAME_HPP_INCLUDED
-#define GAME_HPP_INCLUDED
+#pragma once
 
 #include "globalConstants.h"
 #include <SDL.h>
@@ -28,4 +27,3 @@ private:
 
 };
 
-#endif // GAME_HPP_INCLUDED

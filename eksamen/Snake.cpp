@@ -7,12 +7,13 @@ Snake::Snake(int startx, int starty, char dir, SDL_Renderer* ren) {
     headTexture = loadTexture("head_body.bmp");
     bodyTexture = loadTexture("head_body.bmp");
     foodTexture = loadTexture("fruit.bmp");
-    food = new Segment(0, 0);
+    tailTexture = loadTexture("tail.bmp");
+    fruit = new Segment(0, 0);
     do {
-        food->x = rand() % GRID;
-        food->y = rand() % GRID;
-    } while (food->x != startx && food->y != starty);
-    addSegment(startx, starty);
+        fruit->x = rand() % map;
+        fruit->y = rand() % map;
+    } while (fruit->x != startx && fruit->y != starty);
+    grow(startx, starty);
 }
 
 Snake::~Snake() {
@@ -20,12 +21,12 @@ Snake::~Snake() {
         delete body[i];
 }
 
-void Snake::addSegment(int x, int y) {
+void Snake::grow(int x, int y) {
     Segment* seg = new Segment(x, y);
     body.push_back(seg);
 }
 
-void Snake::move() {
+void Snake::movement() {
     if (!alive) return;
     int dx, dy;
     switch (direction) {
@@ -66,7 +67,7 @@ SDL_Texture* Snake::loadTexture(const char* filename) {
     return texture;
 }
 
-void Snake::setDirection(char dir) {
+void Snake::setDir(char dir) {
     switch (direction) {
     case Snake::NORTH:
         if (dir == Snake::SOUTH) return;
@@ -88,9 +89,9 @@ void Snake::setDirection(char dir) {
     direction = dir;
 }
 
-void Snake::checkCollision() {
+void Snake::collider() {
     Segment* head = body[0];
-    if (head->x < 0 || head->x > GRID - 1 || head->y < 0 || head->y > GRID - 1) {
+    if (head->x < 0 || head->x > map - 1 || head->y < 0 || head->y > map - 1) {
         alive = false;
         return;
     }
@@ -104,39 +105,46 @@ void Snake::checkCollision() {
 
 void Snake::render() {
     SDL_Rect r;
-    r.w = r.h = C_SIZE;
-    r.x = food->x * C_SIZE;
-    r.y = food->y * C_SIZE;
+    r.w = r.h = characterSize;
+    r.x = fruit->x * characterSize;
+    r.y = fruit->y * characterSize;
     SDL_RenderCopy(renderer, foodTexture, NULL, &r);
 
-    r.x = body[0]->x * C_SIZE;
-    r.y = body[0]->y * C_SIZE;
+    r.x = body[0]->x * characterSize;
+    r.y = body[0]->y * characterSize;
     SDL_RenderCopyEx(renderer, headTexture, NULL, &r,
         (direction == Snake::WEST || direction == Snake::EAST) ? 90.0 : 0.0,
         NULL, SDL_FLIP_NONE);
 
+
+
     for (int i = 1; i < body.size(); i++) {
-        r.x = body[i]->x * C_SIZE;
-        r.y = body[i]->y * C_SIZE;
+        r.x = body[i]->x * characterSize;
+        r.y = body[i]->y * characterSize;
         SDL_RenderCopy(renderer, bodyTexture, NULL, &r);
+        if (i == body.size() - 1) {
+            SDL_RenderCopyEx(renderer, tailTexture, NULL, &r,
+                (direction == Snake::WEST || direction == Snake::EAST) ? 90.0:0.0,
+                NULL, SDL_FLIP_NONE);
+        }
     }
 }
 
-void Snake::checkAndEatFood() {
-    if (body[0]->x == food->x && body[0]->y == food->y)
-        addSegment(body[body.size() - 1]->x, body[body.size() - 1]->y);
+void Snake::eat() {
+    if (body[0]->x == fruit->x && body[0]->y == fruit->y)
+        grow(body[body.size() - 1]->x, body[body.size() - 1]->y);
     else return;
 
     auto collides = [&]() {
         for (auto s : body) {
-            if (food->x == s->x && food->y == s->y)
+            if (fruit->x == s->x && fruit->y == s->y)
                 return true;
         }
         return false;
     };
 
     do {
-        food->x = rand() % GRID;
-        food->y = rand() % GRID;
+        fruit->x = rand() % map;
+        fruit->y = rand() % map;
     } while (collides());
 }

@@ -8,6 +8,9 @@ gameManager::gameManager() {
 }
 
 gameManager::~gameManager() {
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
     delete snake;
 }
 
@@ -28,7 +31,7 @@ void gameManager::init(const char* title, int posx, int posy, int width, int hei
     }
     SDL_SetRenderDrawColor(renderer, 170, 170, 170, 255);
     running = true;
-    snake = new Snake(GRID / 2, GRID / 2, rand() % 4, renderer);
+    snake = new Snake(map / 2, map / 2, rand() % 4, renderer);
 }
 
 void gameManager::handleEvents() {
@@ -37,16 +40,16 @@ void gameManager::handleEvents() {
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-                snake->setDirection(Snake::NORTH);
+                snake->setDir(Snake::NORTH);
                 break;
             case SDLK_DOWN:
-                snake->setDirection(Snake::SOUTH);
+                snake->setDir(Snake::SOUTH);
                 break;
             case SDLK_LEFT:
-                snake->setDirection(Snake::WEST);
+                snake->setDir(Snake::WEST);
                 break;
             case SDLK_RIGHT:
-                snake->setDirection(Snake::EAST);
+                snake->setDir(Snake::EAST);
                 break;
             case SDLK_RETURN:
                 if (!snake->isAlive()) running = false;
@@ -61,9 +64,9 @@ void gameManager::handleEvents() {
 
 void gameManager::update() {
     if (snake->isAlive()) {
-        snake->checkCollision();
-        snake->checkAndEatFood();
-        snake->move();
+        snake->collider();
+        snake->eat();
+        snake->movement();
     }
 }
 
@@ -71,7 +74,7 @@ void gameManager::render() {
     SDL_RenderClear(renderer);
     snake->render();
     if (!snake->isAlive()) {
-        SDL_Quit();
+        running = false;
     }
     SDL_RenderPresent(renderer);
 }

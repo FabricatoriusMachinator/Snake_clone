@@ -3,15 +3,15 @@
 gameManager* game = nullptr;
 
 int main(int argc, char* argv[]) {
-    srand(time(NULL));
-    const int frameRate = 5;
+    //srand(time(NULL));
+    const int frameRate = 10;
     const int frameDelay = 1000 / frameRate;
 
     Uint32 frameTime;
     int frameElapsedTime;
 
     game = new gameManager();
-    game->init("Snake in C++ with SDL2 help", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, G_SIZE, G_SIZE);
+    game->init("Snake in C++ with SDL2 help", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowSize, windowSize);
     while (game->isRunning()) {
         frameTime = SDL_GetTicks();
 
