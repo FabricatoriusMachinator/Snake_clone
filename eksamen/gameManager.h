@@ -12,8 +12,8 @@ class gameManager {
 public:
     gameManager();
     ~gameManager();
-    void init(const char* title, int posx, int posy, int width, int height);
-    void handleEvents();
+    void start(const char* title, int posx, int posy, int width, int height);
+    void eventHandler();
     void update();
     void render();
     void clean();

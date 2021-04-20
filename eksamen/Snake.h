@@ -10,6 +10,7 @@
 struct Segment {
     int x;
     int y;
+
     Segment(int posx, int posy) {
         x = posx;
         y = posy;
@@ -19,25 +20,24 @@ struct Segment {
 class Snake {
 
 public:
-    Snake(int startx, int starty, char dir, SDL_Renderer* ren);
+    Snake(int startx, int starty, int dir, SDL_Renderer* ren);
     ~Snake();
     void grow(int x, int y);
     void movement();
-    SDL_Texture* loadTexture(const char* filename);
-    void setDir(char dir);
+    SDL_Texture* setTexture(const char* file);
+    void setDir(int dir);
     void collider();
     void render();
     bool isAlive() { return alive; }
     void eat();
+    bool checkFruitSpawn();
+    void spawnFruit();
 
-    static const char NORTH = 0;
-    static const char SOUTH = 1;
-    static const char EAST = 2;
-    static const char WEST = 3;
+    enum { UP, DOWN, RIGHT, LEFT };
 
 private:
     std::vector<Segment*> body;
-    char direction;
+    int direction;
     SDL_Texture* headTexture;
     SDL_Texture* bodyTexture;
     SDL_Texture* tailTexture;

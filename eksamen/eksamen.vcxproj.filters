@@ -40,13 +40,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="head_body.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="fruit.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="tail.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="head.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="body.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
