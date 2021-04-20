@@ -32,6 +32,7 @@ public:
     void eat();
     bool checkFruitSpawn();
     void spawnFruit();
+    int score;
 
     enum { UP, DOWN, RIGHT, LEFT };
 

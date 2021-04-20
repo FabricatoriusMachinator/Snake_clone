@@ -6,6 +6,7 @@
 #include <ctime>
 #include <cstdlib>
 #include "Snake.h"
+#include <string>
 
 class gameManager {
 
@@ -16,8 +17,8 @@ public:
     void eventHandler();
     void update();
     void render();
-    void clean();
     bool isRunning() { return running; }
+    std::string title;
 
 private:
     SDL_Window* window;

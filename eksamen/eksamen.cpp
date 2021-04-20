@@ -3,24 +3,24 @@
 int main(int argc, char* argv[]) {
 
     gameManager* gameMngr = nullptr;
-    const int frameRate = 10;
-    const int frameDelay = 1000 / frameRate;
+    const int fps = 10;
+    const int fDelay = 1000 / fps;
 
-    Uint32 frameTime;
-    int frameElapsedTime;
+    Uint32 fTime;
+    int fTimePassed;
 
     gameMngr = new gameManager();
-    gameMngr->start("Snake in C++ with SDL2 help", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowSize, windowSize);
+    gameMngr->start("Eksamen Snake | Score: 0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowSize, windowSize);
     while (gameMngr->isRunning()) {
-        frameTime = SDL_GetTicks();
+        fTime = SDL_GetTicks();
 
         gameMngr->eventHandler();
         gameMngr->update();
         gameMngr->render();
 
-        frameElapsedTime = SDL_GetTicks() - frameTime;
-        if (frameDelay > frameElapsedTime)
-            SDL_Delay(frameDelay - frameElapsedTime);
+        fTimePassed = SDL_GetTicks() - fTime;
+        if (fDelay > fTimePassed)
+            SDL_Delay(fDelay - fTimePassed);
     }
     return 0;
 }

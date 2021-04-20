@@ -4,14 +4,15 @@ Snake::Snake(int startPosX, int startPosY, int dir, SDL_Renderer* ren) {
     direction = dir;
     renderer = ren;
     alive = true;
+    score = 0;
     headTexture = setTexture("head.bmp");
     bodyTexture = setTexture("body.bmp");
     foodTexture = setTexture("fruit.bmp");
     tailTexture = setTexture("tail.bmp");
     fruit = new Segment(0, 0);
     do {
-        fruit->x = rand() % map;
-        fruit->y = rand() % map;
+        fruit->x = rand() % board;
+        fruit->y = rand() % board;
     } while (fruit->x != startPosX && fruit->y != startPosY);
     grow(startPosX, startPosY);
 }
@@ -24,6 +25,7 @@ Snake::~Snake() {
 void Snake::grow(int x, int y) {
     Segment* seg = new Segment(x, y);
     body.push_back(seg);
+    score++;
 }
 
 void Snake::movement() {
@@ -96,7 +98,7 @@ void Snake::setDir(int dir) {
 
 void Snake::collider() {
     Segment* head = body[0];
-    if (head->x < 0 || head->x > map - 1 || head->y < 0 || head->y > map - 1) {
+    if (head->x < 0 || head->x > board - 1 || head->y < 0 || head->y > board - 1) {
         alive = false;
         return;
     }
@@ -161,7 +163,7 @@ bool Snake::checkFruitSpawn()
 void Snake::spawnFruit() {
     
     while (!checkFruitSpawn()) {
-        fruit->x = rand() % map;
-        fruit->y = rand() % map;
+        fruit->x = rand() % board;
+        fruit->y = rand() % board;
     }
 }
